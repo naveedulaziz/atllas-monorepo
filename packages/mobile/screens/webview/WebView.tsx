@@ -1,36 +1,14 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { StackScreens } from "../../App";
-import { WebView as NativeWebView } from "react-native-webview";
-import { useRef } from "react";
+import {StatusBar} from 'expo-status-bar';
+import {StyleSheet, Text, View} from 'react-native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {StackScreens} from '../../App';
+import {WebView as NativeWebView} from 'react-native-webview'
 
-export default function WebView({
-  route: { params },
-}: NativeStackScreenProps<StackScreens, "App">) {
-  const webviewRef = useRef(null);
-  console.log(
-    "EXPO_PUBLIC_WEBAPP_ROOT=%s",
-    process.env.EXPO_PUBLIC_WEBAPP_ROOT
-  );
-
-  let token = null;
-
-  if (params?.userData) {
-    token = params?.userData?.token;
-  }
-
+export default function WebView({}: NativeStackScreenProps<StackScreens, 'App'>) {
+  console.log('EXPO_PUBLIC_WEBAPP_ROOT=%s', process.env.EXPO_PUBLIC_WEBAPP_ROOT)
   return (
     <View style={styles.container}>
-      <NativeWebView
-        ref={webviewRef}
-        source={{
-          uri: process.env.EXPO_PUBLIC_WEBAPP_ROOT as string,
-          headers: {
-            cookies: `SESSION_TOKEN=${token}`,
-          },
-        }}
-      />
+      <NativeWebView source={{uri: process.env.EXPO_PUBLIC_WEBAPP_ROOT as string}} />
       <StatusBar style="auto" />
     </View>
   );
