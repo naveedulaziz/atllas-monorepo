@@ -127,8 +127,7 @@ There are a couple of things to do once you’re ready for hand-off. First and
 foremost, it’s important to **make sure everything is committed to the “master”
 branch**. Once that’s done, run the NPM script “prepare-submission” in the
 top-level of the workspace, and that will generate a binary file called
-“submission.bundle”. Zip this file up and submit it
-to [this google form](https://forms.gle/tRRZhAj8qQwcS5d17).
+“submission.bundle”. Zip this file up and email it back
 
 # Evaluation
 
@@ -140,7 +139,6 @@ Your submission will be evaluated according to:
 
 # Need Help/More Information?
 If you have any questions or concerns, please reach out to us
-at [developers@atllas.com](mailto:developers@atllas.com?subject=[Atllas%20RN%20Takehome]%20)
 and include “[Atllas RN Takehome]” in the subject line. We’ll be more than happy
 to answer your questions to the best of our ability!
 

@@ -1,9 +1,9 @@
 import IRoute from '../types/IRoute';
 import {Router} from 'express';
-import {compareSync} from 'bcrypt';
+import {compareSync, hashSync} from 'bcrypt';
 import {attachSession} from '../middleware/auth';
 import {sequelize, Session, User} from '../services/db';
-import {randomBytes} from 'crypto';
+import {randomBytes,} from 'crypto';
 
 const AuthRouter: IRoute = {
   route: '/auth',
@@ -111,8 +111,60 @@ const AuthRouter: IRoute = {
     });
 
     // Attempt to register
-    router.post('/register', (req, res) => {
-      // TODO
+    router.post('/register', async (req, res) => {
+      const {
+        username,
+        password,
+        displayName
+      } = req.body;
+
+      console.log({username})
+      console.log({displayName})
+      console.log({password})
+
+      if (!username || !password || !displayName) {
+        return res.status(401).json({
+          success: false,
+          message: 'Missing username/password/displayname.',
+        });
+      }
+
+      const checkUserExists = await User.findOne({
+        where: sequelize.where(
+          sequelize.fn('lower', sequelize.col('username')),
+          sequelize.fn('lower', username),
+        ),
+      }).catch(err => console.error('User lookup failed.', err));
+
+     if (checkUserExists) {
+        return res.status(201).json({
+          success: false,
+          message: 'Invalid username/password.',
+        });
+      }
+
+        // hash user password
+        const userPassword = hashSync(password, 10);
+
+      const user = await User.create({
+       username,
+       password : userPassword,
+       displayName ,
+       registered : new Date()
+      }).catch(err => console.error('User Signup failed.', err));
+
+      // Ensure the user is Created. If not, return an error.
+      if (!user) {
+        return res.status(401).json({
+          success: false,
+          message: 'User Signup failed.',
+        });
+      }
+
+      return res.json({
+        success: true,
+        message: 'Signup Successfully.',
+      });
     });
 
     // Log out
